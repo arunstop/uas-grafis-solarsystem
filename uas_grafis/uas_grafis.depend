@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1559009359 source:d:\c++\uas_grafis\main.cpp
+1560824960 source:d:\c++\uas_grafis\main.cpp
 	<windows.h>
 	<GL/glut.h>
 	<stdlib.h>

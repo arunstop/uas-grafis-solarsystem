@@ -26,6 +26,7 @@ GLUquadric *neptun;
 GLuint neptunTexture;
 GLUquadric *pluto;
 GLuint plutoTexture;
+int zoom = 0;
 
 int LoadBitmap(char *filename)
 {
@@ -378,6 +379,24 @@ static void keyboard(unsigned char key,int x,int y)
 {
 	switch(key)
 	{
+    case 'i': /* zoom in */
+         zoom = zoom  - 20.0f;
+         glViewport(0, 0, 1024, 768);
+         glMatrixMode(GL_PROJECTION);
+         glLoadIdentity();
+         gluPerspective(80.0f + zoom,1024/768,2.0f,100.0f);
+         glMatrixMode(GL_MODELVIEW);
+         glLoadIdentity();
+        break;
+    case 'o': /* zoom out */
+         zoom = zoom  + 20.0f;
+         glViewport(0, 0, 1024, 768);
+         glMatrixMode(GL_PROJECTION);
+         glLoadIdentity();
+         gluPerspective(80.0f + zoom,1024/768,2.0f,100.0f);
+         glMatrixMode(GL_MODELVIEW);
+         glLoadIdentity();
+        break;
 	case 'e': /* exit */
 	     exit(0);
         break;
