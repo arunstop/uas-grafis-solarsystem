@@ -314,3 +314,10 @@
 1501426541 c:\mingw\include\math.h
 	<_mingw.h>
 
+1562830485 source:c:\users\pc\documents\grafis\uas_grafis\main.cpp
+	<windows.h>
+	<GL/glut.h>
+	<stdlib.h>
+	<stdio.h>
+	<math.h>
+

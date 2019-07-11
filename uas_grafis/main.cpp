@@ -27,6 +27,7 @@ GLuint neptunTexture;
 GLUquadric *pluto;
 GLuint plutoTexture;
 int zoom = 0;
+boolean twist = true, twistR= true, twistG= true, twistB= true, twistM= true, twistJ= true, twistS= true, twistN= true, twistU= true, twistP= true;
 
 int LoadBitmap(char *filename)
 {
@@ -334,17 +335,28 @@ static float globRotP = 225.0f;
     gluSphere(pluto, 0.2, 20, 20); //sfera
     glPopMatrix();
 
-
-axisRot += 0.1f; axisRot=fmod(axisRot, 360.0f);
-globRotR += 2.0f; globRotR=fmod(globRotR, 360.0f);
-globRotG += 1.7f; globRotG=fmod(globRotG, 360.0f);
-globRotB += 1.3f; globRotB=fmod(globRotB, 360.0f);
-globRotM += 1.0f; globRotM=fmod(globRotM, 360.0f);
-globRotJ += 0.7f; globRotJ=fmod(globRotJ, 360.0f);
-globRotS += 0.5f; globRotS=fmod(globRotS, 360.0f);
-globRotU += 0.3f; globRotU=fmod(globRotU, 360.0f);
-globRotN += 0.2f; globRotN=fmod(globRotN, 360.0f);
-globRotP += 0.1f; globRotP=fmod(globRotP, 360.0f);
+if (twist == true){
+    axisRot += 0.1f; axisRot=fmod(axisRot, 360.0f);
+    if (twistR == true){
+        globRotR += 2.0f; globRotR=fmod(globRotR, 360.0f);
+    }if (twistG == true){
+        globRotG += 1.7f; globRotG=fmod(globRotG, 360.0f);
+    }if (twistB == true){
+        globRotB += 1.3f; globRotB=fmod(globRotB, 360.0f);
+    }if (twistM == true){
+        globRotM += 1.0f; globRotM=fmod(globRotM, 360.0f);
+    }if (twistJ == true){
+        globRotJ += 0.7f; globRotJ=fmod(globRotJ, 360.0f);
+    }if (twistS == true){
+        globRotS += 0.5f; globRotS=fmod(globRotS, 360.0f);
+    }if (twistU == true){
+        globRotU += 0.3f; globRotU=fmod(globRotU, 360.0f);
+    }if (twistN == true){
+        globRotN += 0.2f; globRotN=fmod(globRotN, 360.0f);
+    }if (twistP == true){
+        globRotP += 0.1f; globRotP=fmod(globRotP, 360.0f);
+    }
+}
 
 
    //draw textured rectangle
@@ -377,6 +389,12 @@ static void idle(void)
 
 static void keyboard(unsigned char key,int x,int y)
 {
+    if (zoom < -40){
+            zoom = -40;
+         }
+    if (zoom > 60){
+            zoom = 60;
+         }
 	switch(key)
 	{
     case 'i': /* zoom in */
@@ -397,7 +415,86 @@ static void keyboard(unsigned char key,int x,int y)
          glMatrixMode(GL_MODELVIEW);
          glLoadIdentity();
         break;
-	case 'e': /* exit */
+    case '0': /* exit */
+	     if (twist==false){
+            twist = true;
+            twistR = true;
+            twistG = true;
+            twistB = true;
+            twistM = true;
+            twistJ = true;
+            twistS = true;
+            twistU = true;
+            twistN = true;
+            twistP = true;
+	     }else if(twist == true){
+            twist = false;
+	     }
+        break;
+	case '1': /* exit */
+	     if (twistR==false){
+            twistR = true;
+	     }else if(twistR == true){
+            twistR = false;
+	     }
+        break;
+	case '2': /* exit */
+	     if (twistG==false){
+            twistG = true;
+	     }else if(twistG == true){
+            twistG = false;
+	     }
+        break;
+    case '3': /* exit */
+	     if (twistB==false){
+            twistB = true;
+	     }else if(twistB == true){
+            twistB = false;
+	     }
+        break;
+    case '4': /* exit */
+	     if (twistM==false){
+            twistM = true;
+	     }else if(twistM == true){
+            twistM = false;
+	     }
+        break;
+    case '5': /* exit */
+	     if (twistJ==false){
+            twistJ = true;
+	     }else if(twistJ == true){
+            twistJ = false;
+	     }
+        break;
+    case '6': /* exit */
+	     if (twistS==false){
+            twistS = true;
+	     }else if(twistS == true){
+            twistS = false;
+	     }
+        break;
+    case '7': /* exit */
+	     if (twistU==false){
+            twistU = true;
+	     }else if(twistU == true){
+            twistU = false;
+	     }
+        break;
+    case '8': /* exit */
+	     if (twistN==false){
+            twistN = true;
+	     }else if(twistN == true){
+            twistN = false;
+	     }
+        break;
+    case '9': /* exit */
+	     if (twistP==false){
+            twistP = true;
+	     }else if(twistP == true){
+            twistP = false;
+	     }
+        break;
+    case 'e': /* exit */
 	     exit(0);
         break;
 	default:
