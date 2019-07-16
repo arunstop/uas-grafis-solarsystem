@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <iostream>
+#include "imageloader.h"
 
 GLUquadric *sun;
 GLuint sunTexture;
@@ -11,7 +13,7 @@ GLuint mercurTexture;
 GLUquadric *venus;
 GLuint venusTexture;
 GLUquadric *pamant;
-GLuint pamantTexture;
+GLuint earthTexture;
 GLUquadric *luna;
 GLuint lunaTexture;
 GLUquadric *marte;
@@ -28,89 +30,81 @@ GLUquadric *pluto;
 GLuint plutoTexture;
 int zoom = 0;
 boolean twist = true, twistR= true, twistG= true, twistB= true, twistM= true, twistJ= true, twistS= true, twistN= true, twistU= true, twistP= true;
-
-int LoadBitmap(char *filename)
-{
-    FILE * file;
-    char temp;
-    long i;
-
-    BITMAPINFOHEADER infoheader;
-    unsigned char *infoheader_data;
-
-    GLuint num_texture;
-
-    if( (file = fopen(filename, "rb"))==NULL) return (-1); // Open the file for reading
-
-    fseek(file, 18, SEEK_CUR);  /* start reading width & height */
-    fread(&infoheader.biWidth, sizeof(int), 1, file);
-
-    fread(&infoheader.biHeight, sizeof(int), 1, file);
-
-    fread(&infoheader.biPlanes, sizeof(short int), 1, file);
-    if (infoheader.biPlanes != 1) {
-      printf("Planes from %s is not 1: %u", filename, infoheader.biPlanes);
-      return 0;
-    }
-
-    // read the bpp
-    fread(&infoheader.biBitCount, sizeof(unsigned short int), 1, file);
-    if (infoheader.biBitCount != 24) {
-      printf("Bpp from %s is not 24: %d", filename, infoheader.biBitCount);
-      return 0;
-    }
-
-    fseek(file, 24, SEEK_CUR);
-
-    // read the data
-    if(infoheader.biWidth<0){
-  infoheader.biWidth = -infoheader.biWidth;
-    }
-    if(infoheader.biHeight<0){
-  infoheader.biHeight = -infoheader.biHeight;
-    }
-    infoheader_data = (unsigned char *) malloc(infoheader.biWidth * infoheader.biHeight * 3);
-    if (infoheader_data == NULL) {
-      printf("Error allocating memory for color-corrected image data");
-      return 0;
-    }
-
-    if ((i = fread(infoheader_data, infoheader.biWidth * infoheader.biHeight * 3, 1, file)) != 1) {
-      printf("Error reading image data from %s.", filename);
-      return 0;
-    }
-
-    for (i=0; i<(infoheader.biWidth * infoheader.biHeight * 3); i+=3) { // reverse all of the colors. (bgr -> rgb)
-      temp = infoheader_data[i];
-      infoheader_data[i] = infoheader_data[i+2];
-      infoheader_data[i+2] = temp;
-    }
+float Cx = 0.0f, Cy = 2.5f, Cz = 0.0f;
+float Lx = 0.0f, Ly = 2.5f, Lz = -20.0f;
+float sudut_x = 0.0f;
+float sudut_x2 = 0.0f;
+float sudut_z = 0.0f;
+float sudut_z2 = 0.0f;
+float sudut_y = 0.0f;
+float sudut_y2 = 0.0f;
 
 
-    fclose(file); // Closes the file stream
-
-    glGenTextures(1, &num_texture);
-    glBindTexture(GL_TEXTURE_2D, num_texture); // Bind the ID texture specified by the 2nd parameter
-
-    // The next commands sets the texture parameters
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // If the u,v coordinates overflow the range 0,1 the image is repeated
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // The magnification function ("linear" produces better results)
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST); //The minifying function
-
-    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-
-    // Finally we define the 2d texture
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, infoheader.biWidth, infoheader.biHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, infoheader_data);
-
-    // And create 2d mipmaps for the minifying function
-    gluBuild2DMipmaps(GL_TEXTURE_2D, 3, infoheader.biWidth, infoheader.biHeight, GL_RGB, GL_UNSIGNED_BYTE, infoheader_data);
-
-    free(infoheader_data); // Free the memory we used to load the texture
-
-    return (num_texture); // Returns the current texture OpenGL ID
+float toRadians(float angle){
+    return angle * M_PI / 180;
 }
 
+class Vector{
+public :
+    float x, y, z;
+    void set_values (float startX, float startY, float startZ){
+         x = startX;
+         y = startY;
+         z = startZ;
+    }
+
+    void vectorRotation(Vector refs, float angle){
+        Vector temp = refs;
+        float magnitude = sqrt(pow(temp.x, 2) + pow(temp.y, 2) + pow(temp.z, 2));
+        temp.x = temp.x / magnitude;
+        temp.y = temp.y / magnitude;
+        temp.z = temp.z / magnitude;
+        float dot_product = (x * temp.x)+(y * temp.y)+(z * temp.z);
+        float cross_product_x = (y * temp.z) - (temp.z * z);
+        float cross_product_y = -((x * temp.z) - (z * temp.x));
+        float cross_product_z = (x * temp.y) - (y * temp.x);
+        float last_factor_rodrigues = 1.0f - cos(toRadians(fmod(angle, 360.0f)));
+        x = (x * cos(toRadians(fmod(angle, 360.0f)))) + (cross_product_x * sin(toRadians(fmod(angle, 360.0f)))) + (dot_product * last_factor_rodrigues * x);
+        y = (y * cos(toRadians(fmod(angle, 360.0f)))) + (cross_product_y * sin(toRadians(fmod(angle, 360.0f)))) + (dot_product * last_factor_rodrigues * y);
+        z = (z * cos(toRadians(fmod(angle, 360.0f)))) + (cross_product_z * sin(toRadians(fmod(angle, 360.0f)))) + (dot_product * last_factor_rodrigues * z);
+    }
+};
+
+void cameraRotation(Vector refer, double angle){
+    float M = sqrt(pow(refer.x, 2) + pow(refer.y, 2) + pow(refer.z, 2));
+    float Up_x1 = refer.x / M;
+    float Up_y1 = refer.y / M;
+    float Up_z1 = refer.z / M;
+    float VLx = Lx - Cx;
+    float VLy = Ly - Cy;
+    float VLz = Lz - Cz;
+    float dot_product = (VLx * Up_x1) + (VLy * Up_y1) + (VLz * Up_z1);
+    float cross_product_x = (Up_y1 * VLz) - (VLy * Up_z1);
+    float cross_product_y = -((Up_x1 * VLz) - (Up_z1 * VLx));
+    float cross_product_z = (Up_x1 * VLy) - (Up_y1 * VLx);
+    float last_factor_rodrigues = 1.0f - cos(toRadians(angle));
+    float Lx1 = (VLx * cos(toRadians(angle))) + (cross_product_x * sin(toRadians(angle))) + (dot_product * last_factor_rodrigues * VLx);
+    float Ly1 = (VLy * cos(toRadians(angle))) + (cross_product_y * sin(toRadians(angle))) + (dot_product * last_factor_rodrigues * VLy);
+    float Lz1 = (VLz * cos(toRadians(angle))) + (cross_product_z * sin(toRadians(angle))) + (dot_product * last_factor_rodrigues * VLz);
+    Lx = Lx1+Cx;
+    Ly = Ly1+Cy;
+    Lz = Lz1+Cz;
+}
+
+
+GLuint loadTexture(Image* image) {
+
+    GLuint textureId;
+
+    glGenTextures(1, &textureId);
+
+    glBindTexture(GL_TEXTURE_2D, textureId);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->width, image->height, 0, GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
+
+    return textureId;
+
+}
 
 void initGL(int width, int height)
 {
@@ -136,54 +130,66 @@ void initGL(int width, int height)
     // textura soare //////////////////////////////////
     sun = gluNewQuadric();
     gluQuadricTexture( sun, GL_TRUE);
-    //  sunTexture = LoadBitmap("poze/sun.bmp");
+    gluQuadricNormals(sun, GL_SMOOTH);
+    Image* sunImage=loadBMP("poze/sun.bmp");
+    sunTexture = loadTexture(sunImage);
     ///////////////////////////////////////////////////
     // textura planeta mercur
     mercur = gluNewQuadric();
     gluQuadricTexture( mercur, GL_TRUE);
-    //mercurTexture = LoadBitmap("poze/mercury.bmp");
+    Image* mercurImage=loadBMP("poze/mercury.bmp");
+    mercurTexture = loadTexture(mercurImage);
     //////////////////////////////////////////////////
     // textura planeta venus
     venus = gluNewQuadric();
     gluQuadricTexture( venus, GL_TRUE);
-    //venusTexture = LoadBitmap("poze/venus.bmp");
+    Image* venusImage=loadBMP("poze/venus.bmp");
+    venusTexture = loadTexture(venusImage);
     //////////////////////////////////////////////////
     // textura planeta pamant
     pamant = gluNewQuadric();
     gluQuadricTexture( pamant, GL_TRUE);
-    //pamantTexture = LoadBitmap("poze/earth.bmp");
+    Image* earthImage=loadBMP("poze/earth.bmp");
+    earthTexture = loadTexture(earthImage);
     //////////////////////////////////////////////////
     // textura luna
     luna = gluNewQuadric();
     gluQuadricTexture( luna, GL_TRUE);
-    //lunaTexture = LoadBitmap("poze/moon.bmp");
+    Image* moonImage=loadBMP("poze/moon.bmp");
+    lunaTexture = loadTexture(moonImage);
     //////////////////////////////////////////////////
     // textura planeta marte
     marte = gluNewQuadric();
     gluQuadricTexture( marte, GL_TRUE);
-    //marteTexture = LoadBitmap("poze/mars.bmp");
+    Image* marsImage=loadBMP("poze/mars.bmp");
+    marteTexture = loadTexture(marsImage);
     //////////////////////////////////////////////////
     // textura planeta jupiter
     jupiter = gluNewQuadric();
     gluQuadricTexture( jupiter, GL_TRUE);
-    //jupiterTexture = LoadBitmap("poze/jupiter.bmp");
+    Image* jupiterImage=loadBMP("poze/jupiter.bmp");
+    jupiterTexture = loadTexture(jupiterImage);
     //////////////////////////////////////////////////
     // textura planeta saturn
     saturn = gluNewQuadric();
     gluQuadricTexture( saturn, GL_TRUE);
-    //saturnTexture = LoadBitmap("poze/saturn.bmp");
+    Image* saturnImage=loadBMP("poze/saturn.bmp");
+    saturnTexture = loadTexture(saturnImage);
     //////////////////////////////////////////////////
     // textura planeta uranus
     uranus = gluNewQuadric();
     gluQuadricTexture( uranus, GL_TRUE);
-    //uranusTexture = LoadBitmap("poze/uranus.bmp");
+    Image* uranusImage=loadBMP("poze/uranus.bmp");
+    uranusTexture = loadTexture(uranusImage);
     //////////////////////////////////////////////////
     // textura planeta neptun
     neptun = gluNewQuadric();
     gluQuadricTexture( neptun, GL_TRUE);
-    //neptunTexture = LoadBitmap("poze/neptune.bmp");
+    Image* neptunImage=loadBMP("poze/neptune.bmp");
+    neptunTexture = loadTexture(neptunImage);
     //////////////////////////////////////////////////
     // textura planeta pluto
+    glColor3f(0.658824f, 0.658824f, 0.658824f);
     pluto = gluNewQuadric();
     gluQuadricTexture( pluto, GL_TRUE);
     //plutoTexture = LoadBitmap("poze/pluto.bmp");
@@ -194,26 +200,16 @@ void initGL(int width, int height)
 }
 
 
+Vector sumbu_z, sumbu_x, sumbu_y;
+
 
 static void display(void)
 {
 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-glEnable ( GL_TEXTURE_2D );
-// Planete ////////////////////////////////////////
-glBindTexture ( GL_TEXTURE_2D, sunTexture);
-glBindTexture ( GL_TEXTURE_2D, mercurTexture);
-glBindTexture ( GL_TEXTURE_2D, venusTexture);
-glBindTexture ( GL_TEXTURE_2D, pamantTexture);
-glBindTexture ( GL_TEXTURE_2D, lunaTexture);
-//de aici in jos probleme!!!
-glBindTexture ( GL_TEXTURE_2D, marteTexture);
-glBindTexture ( GL_TEXTURE_2D, jupiterTexture);
-glBindTexture ( GL_TEXTURE_2D, saturnTexture);
-glBindTexture ( GL_TEXTURE_2D, uranusTexture);
-glBindTexture ( GL_TEXTURE_2D, neptunTexture);
-glBindTexture ( GL_TEXTURE_2D, plutoTexture);
-//////////////////////////////////////////////////
 glMatrixMode(GL_MODELVIEW);
+gluLookAt(Cx, Cy, Cz,
+            Lx, Ly, Lz,
+            sumbu_y.x, sumbu_y.y, sumbu_y.z);
 glLoadIdentity(); //initializarea sistemului de coordonate
 static float axisRot = 0.0f;
 static float globRotR = 0.0f;
@@ -227,16 +223,24 @@ static float globRotN = 200.0f;
 static float globRotP = 225.0f;
 
 /* Soare */
-    glColor3f(1.0f, 0.5f, 0.0f);
+    //glColor3f(1.0f, 0.5f, 0.0f);
     glPushMatrix();
+    glEnable ( GL_TEXTURE_2D );
+    glBindTexture ( GL_TEXTURE_2D, sunTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTranslatef(0.0f,0.0f,-20); //deplasat pe axele x, y, z
     glRotatef(axisRot,0,1,0); //rotit pe axa Y
     gluSphere(sun, 2, 20, 20); //sfera
     glPopMatrix();
 
 /* Planeta Mercur */
-    glColor3f(1.0f, 0.8f, 0.0f);
+    //glColor3f(1.0f, 0.8f, 0.0f);
     glPushMatrix();
+    glEnable ( GL_TEXTURE_2D );
+    glBindTexture ( GL_TEXTURE_2D, mercurTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTranslatef(0.0f,0.0f,-37); //deplasat pe axele x, y, z
     glRotatef(globRotR, 0,0,1);
     glTranslatef(5.0f,0.0f,0.0f);
@@ -245,8 +249,12 @@ static float globRotP = 225.0f;
     glPopMatrix();
 
 /* Planeta Venus */
-    glColor3f(1.0f, 0.6f, 0.0f);
+    //glColor3f(1.0f, 0.6f, 0.0f);
     glPushMatrix();
+    glEnable ( GL_TEXTURE_2D );
+    glBindTexture ( GL_TEXTURE_2D, venusTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTranslatef(0.0f,0.0f,-34); //deplasat pe axele x, y, z
     glRotatef(globRotG, 0,0,1);
     glTranslatef(5.0f,0.0f,0.0f);
@@ -255,8 +263,12 @@ static float globRotP = 225.0f;
     glPopMatrix();
 
 /* Planeta Pamant (Terra) */
-    glColor3f(0.196078f, 0.6f, 0.8f);
+    //glColor3f(0.196078f, 0.6f, 0.8f);
     glPushMatrix();
+    glEnable ( GL_TEXTURE_2D );
+    glBindTexture ( GL_TEXTURE_2D, earthTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTranslatef(0.0f,0.0f,-30); //deplasat pe axele x, y, z
     glRotatef(globRotB, 0,0,1);
     glTranslatef(5.0f,0.0f,0.0f);
@@ -265,8 +277,12 @@ static float globRotP = 225.0f;
     glPopMatrix();
 
 /* Luna (Terra) */
-    glColor3f(1.0f, 1.0f, 1.0f);
+    //glColor3f(1.0f, 1.0f, 1.0f);
     glPushMatrix();
+    glEnable ( GL_TEXTURE_2D );
+    glBindTexture ( GL_TEXTURE_2D, lunaTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTranslatef(0.0f,0.0f,-25.5); //deplasat pe axele x, y, z
     glRotatef(globRotB, 0,0,1);
     glTranslatef(5.0f,0.0f,0.0f);
@@ -275,8 +291,12 @@ static float globRotP = 225.0f;
     glPopMatrix();
 
 /* Planeta Marte */
-    glColor3f(1.0f, 0.3f, 0.0f);
+    //glColor3f(1.0f, 0.3f, 0.0f);
     glPushMatrix();
+    glEnable ( GL_TEXTURE_2D );
+    glBindTexture ( GL_TEXTURE_2D, marteTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTranslatef(0.0f,0.0f,-23); //deplasat pe axele x, y, z
     glRotatef(globRotM, 0,0,1);
     glTranslatef(5.0f,0.0f,0.0f);
@@ -285,8 +305,12 @@ static float globRotP = 225.0f;
     glPopMatrix();
 
 /* Planeta Jupiter */
-    glColor3f(0.647059f, 0.164706f, 0.164706f);
+    //glColor3f(0.647059f, 0.164706f, 0.164706f);
     glPushMatrix();
+    glEnable ( GL_TEXTURE_2D );
+    glBindTexture ( GL_TEXTURE_2D, jupiterTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTranslatef(0.0f,0.0f,-20); //deplasat pe axele x, y, z
     glRotatef(globRotJ, 0,0,1);
     glTranslatef(5.0f,0.0f,0.0f);
@@ -295,8 +319,12 @@ static float globRotP = 225.0f;
     glPopMatrix();
 
 /* Planeta Saturn */
-    glColor3f(0.55f, 0.47f, 0.14f);
+    //glColor3f(0.55f, 0.47f, 0.14f);
     glPushMatrix();
+    glEnable ( GL_TEXTURE_2D );
+    glBindTexture ( GL_TEXTURE_2D, saturnTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTranslatef(0.0f,0.0f,-16); //deplasat pe axele x, y, z
     glRotatef(globRotS, 0,0,1);
     glTranslatef(5.0f,0.0f,0.0f);
@@ -305,8 +333,12 @@ static float globRotP = 225.0f;
     glPopMatrix();
 
 /* Planeta Uranus */
-    glColor3f(0.0f, 1.0f, 0.0f);
+    //glColor3f(0.0f, 1.0f, 0.0f);
     glPushMatrix();
+    glEnable ( GL_TEXTURE_2D );
+    glBindTexture ( GL_TEXTURE_2D, uranusTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTranslatef(0.0f,0.0f,-14); //deplasat pe axele x, y, z
     glRotatef(globRotU, 0,0,1);
     glTranslatef(5.0f,0.0f,0.0f);
@@ -315,8 +347,12 @@ static float globRotP = 225.0f;
     glPopMatrix();
 
 /* Planeta Neptun */
-    glColor3f(0.196078f, 0.5f, 0.7f);
+    //glColor3f(0.196078f, 0.5f, 0.7f);
     glPushMatrix();
+    glEnable ( GL_TEXTURE_2D );
+    glBindTexture ( GL_TEXTURE_2D, neptunTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTranslatef(0.0f,0.0f,-10); //deplasat pe axele x, y, z
     glRotatef(globRotN, 0,0,1);
     glTranslatef(5.0f,0.0f,0.0f);
@@ -325,8 +361,12 @@ static float globRotP = 225.0f;
     glPopMatrix();
 
 /* Planeta Pluto */
-    glColor3f(0.658824f, 0.658824f, 0.658824f);
+    //glColor3f(0.658824f, 0.658824f, 0.658824f);
     glPushMatrix();
+    glEnable ( GL_TEXTURE_2D );
+    glBindTexture ( GL_TEXTURE_2D, plutoTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTranslatef(0.0f,0.0f,-6); //deplasat pe axele x, y, z
     glRotatef(globRotP, 0,0,1);
     glTranslatef(5.0f,0.0f,0.0f);
@@ -397,6 +437,13 @@ static void keyboard(unsigned char key,int x,int y)
          }
 	switch(key)
 	{
+    case '74': // J
+        sudut_z += 15.0f;
+        sumbu_z.vectorRotation(sumbu_y, sudut_z - sudut_z2); //memutar vector sumbu z terhadap x (target, patokan)
+        sumbu_x.vectorRotation(sumbu_y, sudut_z - sudut_z2);
+        cameraRotation(sumbu_y, sudut_z - sudut_z2); // look at
+        sudut_z2 = sudut_z;
+        break;
     case 'i': /* zoom in */
          zoom = zoom  - 20.0f;
          glViewport(0, 0, 1024, 768);

@@ -314,10 +314,19 @@
 1501426541 c:\mingw\include\math.h
 	<_mingw.h>
 
-1562830485 source:c:\users\pc\documents\grafis\uas_grafis\main.cpp
+1563253543 source:c:\users\pc\documents\grafis\uas_grafis\main.cpp
 	<windows.h>
 	<GL/glut.h>
 	<stdlib.h>
 	<stdio.h>
 	<math.h>
+	<iostream>
+	"imageloader.h"
+
+1563253509 source:c:\users\pc\documents\grafis\uas_grafis\src\imageloader.cpp
+	<assert.h>
+	<fstream>
+	"imageloader.h"
+
+1563250648 c:\users\pc\documents\grafis\uas_grafis\include\imageloader.h
 
