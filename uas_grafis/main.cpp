@@ -129,68 +129,68 @@ void initGL(int width, int height)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(-1.0, 1.0, -1.0, 1.0, -2.0, 2.0);
-    // textura soare //////////////////////////////////
+    // texture sun //////////////////////////////////
     sun = gluNewQuadric();
     gluQuadricTexture( sun, GL_TRUE);
     gluQuadricNormals(sun, GL_SMOOTH);
     Image* sunImage=loadBMP("poze/sun.bmp");
     sunTexture = loadTexture(sunImage);
     ///////////////////////////////////////////////////
-    // textura planeta mercur
+    // texture planet mercur
     mercur = gluNewQuadric();
     gluQuadricTexture( mercur, GL_TRUE);
     Image* mercurImage=loadBMP("poze/mercury.bmp");
     mercurTexture = loadTexture(mercurImage);
     //////////////////////////////////////////////////
-    // textura planeta venus
+    // texture planet venus
     venus = gluNewQuadric();
     gluQuadricTexture( venus, GL_TRUE);
     Image* venusImage=loadBMP("poze/venus.bmp");
     venusTexture = loadTexture(venusImage);
     //////////////////////////////////////////////////
-    // textura planeta pamant
+    // texture planet earth
     pamant = gluNewQuadric();
     gluQuadricTexture( pamant, GL_TRUE);
     Image* earthImage=loadBMP("poze/earth.bmp");
     earthTexture = loadTexture(earthImage);
     //////////////////////////////////////////////////
-    // textura luna
+    // texture lun
     luna = gluNewQuadric();
     gluQuadricTexture( luna, GL_TRUE);
     Image* moonImage=loadBMP("poze/moon.bmp");
     lunaTexture = loadTexture(moonImage);
     //////////////////////////////////////////////////
-    // textura planeta marte
+    // texture planet mars
     marte = gluNewQuadric();
     gluQuadricTexture( marte, GL_TRUE);
     Image* marsImage=loadBMP("poze/mars.bmp");
     marteTexture = loadTexture(marsImage);
     //////////////////////////////////////////////////
-    // textura planeta jupiter
+    // texture planet jupiter
     jupiter = gluNewQuadric();
     gluQuadricTexture( jupiter, GL_TRUE);
     Image* jupiterImage=loadBMP("poze/jupiter.bmp");
     jupiterTexture = loadTexture(jupiterImage);
     //////////////////////////////////////////////////
-    // textura planeta saturn
+    // texture planet saturn
     saturn = gluNewQuadric();
     gluQuadricTexture( saturn, GL_TRUE);
     Image* saturnImage=loadBMP("poze/saturn.bmp");
     saturnTexture = loadTexture(saturnImage);
     //////////////////////////////////////////////////
-    // textura planeta uranus
+    // texture planet uranus
     uranus = gluNewQuadric();
     gluQuadricTexture( uranus, GL_TRUE);
     Image* uranusImage=loadBMP("poze/uranus.bmp");
     uranusTexture = loadTexture(uranusImage);
     //////////////////////////////////////////////////
-    // textura planeta neptun
+    // texture planet neptun
     neptun = gluNewQuadric();
     gluQuadricTexture( neptun, GL_TRUE);
     Image* neptunImage=loadBMP("poze/neptune.bmp");
     neptunTexture = loadTexture(neptunImage);
     //////////////////////////////////////////////////
-    // textura planeta pluto
+    // texture planet pluto
     glColor3f(0.658824f, 0.658824f, 0.658824f);
     pluto = gluNewQuadric();
     gluQuadricTexture( pluto, GL_TRUE);
@@ -212,7 +212,7 @@ glMatrixMode(GL_MODELVIEW);
 gluLookAt(Cx, Cy, Cz,
             Lx, Ly, Lz,
             sumbu_y.x, sumbu_y.y, sumbu_y.z);
-glLoadIdentity(); //initializarea sistemului de coordonate
+glLoadIdentity();
 static float axisRot = 0.0f;
 static float globRotR = 0.0f;
 static float globRotG = 50.0f;
@@ -224,58 +224,58 @@ static float globRotU = 175.0f;
 static float globRotN = 200.0f;
 static float globRotP = 225.0f;
 
-/* Soare */
+/* Sun */
     //glColor3f(1.0f, 0.5f, 0.0f);
     glPushMatrix();
     glEnable ( GL_TEXTURE_2D );
     glBindTexture ( GL_TEXTURE_2D, sunTexture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTranslatef(0.0f,0.0f,-20); //deplasat pe axele x, y, z
-    glRotatef(axisRot,0,1,0); //rotit pe axa Y
-    gluSphere(sun, 2, 20, 20); //sfera
+    glTranslatef(0.0f,0.0f,-20); //xyz
+    glRotatef(axisRot,0,1,0); //rotasi sumbu Y
+    gluSphere(sun, 2, 20, 20); //sphere
     glPopMatrix();
 
-/* Planeta Mercur */
+/* Planet Mercur */
     //glColor3f(1.0f, 0.8f, 0.0f);
     glPushMatrix();
     glEnable ( GL_TEXTURE_2D );
     glBindTexture ( GL_TEXTURE_2D, mercurTexture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTranslatef(0.0f,0.0f,-37); //deplasat pe axele x, y, z
+    glTranslatef(0.0f,0.0f,-37); //xyz
     glRotatef(globRotR, 0,0,1);
     glTranslatef(5.0f,0.0f,0.0f);
-    glRotatef(axisRot,0,1,0); //rotit pe axa Y
-    gluSphere(mercur, 0.3, 20, 20); //sfera
+    glRotatef(axisRot,0,1,0); //rotasi sumbu Y
+    gluSphere(mercur, 0.3, 20, 20); //sphere
     glPopMatrix();
 
-/* Planeta Venus */
+/* Planet Venus */
     //glColor3f(1.0f, 0.6f, 0.0f);
     glPushMatrix();
     glEnable ( GL_TEXTURE_2D );
     glBindTexture ( GL_TEXTURE_2D, venusTexture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTranslatef(0.0f,0.0f,-34); //deplasat pe axele x, y, z
+    glTranslatef(0.0f,0.0f,-34); //xyz
     glRotatef(globRotG, 0,0,1);
     glTranslatef(6.0f,0.0f,0.0f);
-    glRotatef(axisRot,0,1,0); //rotit pe axa Y
-    gluSphere(venus, 0.6, 20, 20); //sfera
+    glRotatef(axisRot,0,1,0); //rotasi sumbu Y
+    gluSphere(venus, 0.6, 20, 20); //sphere
     glPopMatrix();
 
-/* Planeta Pamant (Terra) */
+/* Planet Pamant (Terra) */
     //glColor3f(0.196078f, 0.6f, 0.8f);
     glPushMatrix();
     glEnable ( GL_TEXTURE_2D );
     glBindTexture ( GL_TEXTURE_2D, earthTexture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTranslatef(0.0f,0.0f,-30); //deplasat pe axele x, y, z
+    glTranslatef(0.0f,0.0f,-30); //xyz
     glRotatef(globRotB, 0,0,1);
     glTranslatef(7.0f,0.0f,0.0f);
-    glRotatef(axisRot,0,1,0); //rotit pe axa Y
-    gluSphere(pamant, 0.8, 20, 20); //sfera
+    glRotatef(axisRot,0,1,0); //rotasi sumbu Y
+    gluSphere(pamant, 0.8, 20, 20); //sphere
     glPopMatrix();
 
 /* Luna (Terra) */
@@ -285,25 +285,25 @@ static float globRotP = 225.0f;
     glBindTexture ( GL_TEXTURE_2D, lunaTexture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTranslatef(0.0f,0.0f,-25.5); //deplasat pe axele x, y, z
+    glTranslatef(0.0f,0.0f,-25.5); //xyz
     glRotatef(globRotB, 0,0,1);
     glTranslatef(7.0f,0.0f,0.0f);
-    glRotatef(axisRot,0,1,0); //rotit pe axa Y
-    gluSphere(luna, 0.2, 20, 20); //sfera
+    glRotatef(axisRot,0,1,0); //rotasi sumbu Y
+    gluSphere(luna, 0.2, 20, 20); //sphere
     glPopMatrix();
 
-/* Planeta Marte */
+/* Planet Marte */
     //glColor3f(1.0f, 0.3f, 0.0f);
     glPushMatrix();
     glEnable ( GL_TEXTURE_2D );
     glBindTexture ( GL_TEXTURE_2D, marteTexture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTranslatef(0.0f,0.0f,-23); //deplasat pe axele x, y, z
+    glTranslatef(0.0f,0.0f,-23); //xyz
     glRotatef(globRotM, 0,0,1);
     glTranslatef(8.0f,0.0f,0.0f);
-    glRotatef(axisRot,0,1,0); //rotit pe axa Y
-    gluSphere(marte, 0.5, 20, 20); //sfera
+    glRotatef(axisRot,0,1,0); //rotasi sumbu Y
+    gluSphere(marte, 0.5, 20, 20); //sphere
     glPopMatrix();
 
 /* Phobos */
@@ -313,11 +313,11 @@ static float globRotP = 225.0f;
     glBindTexture ( GL_TEXTURE_2D, lunaTexture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTranslatef(0.0f,0.0f,-21); //deplasat pe axele x, y, z
+    glTranslatef(0.0f,0.0f,-21); //xyz
     glRotatef(globRotM, 0,0,1);
     glTranslatef(7.9f,0.0f,0.0f);
-    glRotatef(axisRot,0,1,0); //rotit pe axa Y
-    gluSphere(luna, 0.1, 20, 20); //sfera
+    glRotatef(axisRot,0,1,0); //rotasi sumbu Y
+    gluSphere(luna, 0.1, 20, 20); //sphere
     glPopMatrix();
 
 
@@ -328,82 +328,82 @@ static float globRotP = 225.0f;
     glBindTexture ( GL_TEXTURE_2D, lunaTexture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTranslatef(0.0f,0.0f,-21); //deplasat pe axele x, y, z
+    glTranslatef(0.0f,0.0f,-21); //xyz
     glRotatef(globRotM, 0,0,1);
     glTranslatef(7.7f,0.0f,1.0f);
-    glRotatef(axisRot,0,1,0); //rotit pe axa Y
-    gluSphere(luna, 0.05, 20, 20); //sfera
+    glRotatef(axisRot,0,1,0); //rotasi sumbu Y
+    gluSphere(luna, 0.05, 20, 20); //sphere
     glPopMatrix();
 
-/* Planeta Jupiter */
+/* Planet Jupiter */
     //glColor3f(0.647059f, 0.164706f, 0.164706f);
     glPushMatrix();
     glEnable ( GL_TEXTURE_2D );
     glBindTexture ( GL_TEXTURE_2D, jupiterTexture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTranslatef(0.0f,0.0f,-20); //deplasat pe axele x, y, z
+    glTranslatef(0.0f,0.0f,-20); //xyz
     glRotatef(globRotJ, 0,0,1);
     glTranslatef(9.0f,0.0f,0.0f);
-    glRotatef(axisRot,0,1,0); //rotit pe axa Y
-    gluSphere(jupiter, 1, 20, 20); //sfera
+    glRotatef(axisRot,0,1,0); //rotasi sumbu Y
+    gluSphere(jupiter, 1, 20, 20); //sphere
     glPopMatrix();
 
-/* Planeta Saturn */
+/* Planet Saturn */
     //glColor3f(0.55f, 0.47f, 0.14f);
     glPushMatrix();
     glEnable ( GL_TEXTURE_2D );
     glBindTexture ( GL_TEXTURE_2D, saturnTexture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTranslatef(0.0f,0.0f,-16); //deplasat pe axele x, y, z
+    glTranslatef(0.0f,0.0f,-16); //xyz
     glRotatef(globRotS, 0,0,1);
     glTranslatef(10.0f,0.0f,0.0f);
-    glRotatef(axisRot,0,1,0); //rotit pe axa Y
-    gluSphere(saturn, 0.4, 20, 20); //sfera
+    glRotatef(axisRot,0,1,0); //rotasi sumbu Y
+    gluSphere(saturn, 0.4, 20, 20); //sphere
     glPopMatrix();
 
-/* Planeta Uranus */
+/* Planet Uranus */
     //glColor3f(0.0f, 1.0f, 0.0f);
     glPushMatrix();
     glEnable ( GL_TEXTURE_2D );
     glBindTexture ( GL_TEXTURE_2D, uranusTexture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTranslatef(0.0f,0.0f,-14); //deplasat pe axele x, y, z
+    glTranslatef(0.0f,0.0f,-14); //xyz
     glRotatef(globRotU, 0,0,1);
     glTranslatef(10.0f,0.0f,0.0f);
-    glRotatef(axisRot,0,1,0); //rotit pe axa Y
-    gluSphere(uranus, 0.4, 20, 20); //sfera
+    glRotatef(axisRot,0,1,0); //rotasi sumbu Y
+    gluSphere(uranus, 0.4, 20, 20); //sphere
     glPopMatrix();
 
-/* Planeta Neptun */
+/* Planet Neptun */
     //glColor3f(0.196078f, 0.5f, 0.7f);
     glPushMatrix();
     glEnable ( GL_TEXTURE_2D );
     glBindTexture ( GL_TEXTURE_2D, neptunTexture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTranslatef(0.0f,0.0f,-10); //deplasat pe axele x, y, z
+    glTranslatef(0.0f,0.0f,-10); //xyz
     glRotatef(globRotN, 0,0,1);
     glTranslatef(11.0f,0.0f,0.0f);
-    glRotatef(axisRot,0,1,0); //rotit pe axa Y
-    gluSphere(neptun, 0.3, 20, 20); //sfera
+    glRotatef(axisRot,0,1,0); //rotasi sumbu Y
+    gluSphere(neptun, 0.3, 20, 20); //sphere
     glPopMatrix();
 
-/* Planeta Pluto */
+/* Planet Pluto */
     //glColor3f(0.658824f, 0.658824f, 0.658824f);
     glPushMatrix();
     glEnable ( GL_TEXTURE_2D );
     glBindTexture ( GL_TEXTURE_2D, plutoTexture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTranslatef(0.0f,0.0f,-6); //deplasat pe axele x, y, z
+    glTranslatef(0.0f,0.0f,-6); //xyz
     glRotatef(globRotP, 0,0,1);
     glTranslatef(12.0f,0.0f,0.0f);
-    glRotatef(axisRot,0,1,0); //rotit pe axa Y
-    //glutSolidSphere(0.2,20,20); //sfera
-    gluSphere(pluto, 0.2, 20, 20); //sfera
+    glRotatef(axisRot,0,1,0); //rotasi sumbu Y
+    //glutSolidSphere(0.2,20,20); //sphere
+    gluSphere(pluto, 0.2, 20, 20); //sphere
     glPopMatrix();
 
 if (twist == true){
@@ -587,7 +587,7 @@ static void keyboard(unsigned char key,int x,int y)
 	glutPostRedisplay();
 }
 
-/* Punct de intrare in program */
+/* Masuk Program */
 int main(int argc, char *argv[])
 {
     int width = 1024;
