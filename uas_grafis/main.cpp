@@ -474,6 +474,9 @@ static void keyboard(unsigned char key,int x,int y)
     case 'w':
         speed -=1.0f;
         break;
+    case 's':
+        speed = 0.0f;
+        break;
     case '74': // J
         sudut_z += 15.0f;
         sumbu_z.vectorRotation(sumbu_y, sudut_z - sudut_z2); //memutar vector sumbu z terhadap x (target, patokan)
