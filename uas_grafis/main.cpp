@@ -29,6 +29,8 @@ GLuint neptunTexture;
 GLUquadric *pluto;
 GLuint plutoTexture;
 int zoom = 0;
+float speed = 1.0f;
+
 boolean twist = true, twistR= true, twistG= true, twistB= true, twistM= true, twistJ= true, twistS= true, twistN= true, twistU= true, twistP= true;
 float Cx = 0.0f, Cy = 2.5f, Cz = 0.0f;
 float Lx = 0.0f, Ly = 2.5f, Lz = -20.0f;
@@ -378,23 +380,23 @@ static float globRotP = 225.0f;
 if (twist == true){
     axisRot += 0.1f; axisRot=fmod(axisRot, 360.0f);
     if (twistR == true){
-        globRotR += 2.0f; globRotR=fmod(globRotR, 360.0f);
+        globRotR += 2.0f*speed; globRotR=fmod(globRotR, 360.0f);
     }if (twistG == true){
-        globRotG += 1.7f; globRotG=fmod(globRotG, 360.0f);
+        globRotG += 1.7f*speed; globRotG=fmod(globRotG, 360.0f);
     }if (twistB == true){
-        globRotB += 1.3f; globRotB=fmod(globRotB, 360.0f);
+        globRotB += 1.3f*speed; globRotB=fmod(globRotB, 360.0f);
     }if (twistM == true){
-        globRotM += 1.0f; globRotM=fmod(globRotM, 360.0f);
+        globRotM += 1.0f*speed; globRotM=fmod(globRotM, 360.0f);
     }if (twistJ == true){
-        globRotJ += 0.7f; globRotJ=fmod(globRotJ, 360.0f);
+        globRotJ += 0.7f*speed; globRotJ=fmod(globRotJ, 360.0f);
     }if (twistS == true){
-        globRotS += 0.5f; globRotS=fmod(globRotS, 360.0f);
+        globRotS += 0.5f*speed; globRotS=fmod(globRotS, 360.0f);
     }if (twistU == true){
-        globRotU += 0.3f; globRotU=fmod(globRotU, 360.0f);
+        globRotU += 0.3f*speed; globRotU=fmod(globRotU, 360.0f);
     }if (twistN == true){
-        globRotN += 0.2f; globRotN=fmod(globRotN, 360.0f);
+        globRotN += 0.2f*speed; globRotN=fmod(globRotN, 360.0f);
     }if (twistP == true){
-        globRotP += 0.1f; globRotP=fmod(globRotP, 360.0f);
+        globRotP += 0.1f*speed; globRotP=fmod(globRotP, 360.0f);
     }
 }
 
@@ -437,6 +439,12 @@ static void keyboard(unsigned char key,int x,int y)
          }
 	switch(key)
 	{
+    case 'q':
+        speed +=1.0f;
+        break;
+    case 'w':
+        speed -=1.0f;
+        break;
     case '74': // J
         sudut_z += 15.0f;
         sumbu_z.vectorRotation(sumbu_y, sudut_z - sudut_z2); //memutar vector sumbu z terhadap x (target, patokan)
