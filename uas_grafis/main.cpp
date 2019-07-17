@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <iostream>
-#include "imageloader.h"
+#include "imgloader.h"
 
 GLUquadric *sun;
 GLuint sunTexture;

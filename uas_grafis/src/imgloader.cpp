@@ -4,7 +4,7 @@
 
 
 
-#include "imageloader.h"
+#include "imgloader.h"
 
 
 

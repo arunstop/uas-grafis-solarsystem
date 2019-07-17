@@ -330,12 +330,19 @@
 
 1563250648 c:\users\pc\documents\grafis\uas_grafis\include\imageloader.h
 
-1563339219 source:c:\users\pc\documents\uas\grafis\uas_grafis\main.cpp
+1563340558 source:c:\users\pc\documents\uas\grafis\uas_grafis\main.cpp
 	<windows.h>
 	<GL/glut.h>
 	<stdlib.h>
 	<stdio.h>
 	<math.h>
 	<iostream>
-	"imageloader.h"
+	"imgloader.h"
+
+1563340538 source:c:\users\pc\documents\uas\grafis\uas_grafis\src\imgloader.cpp
+	<assert.h>
+	<fstream>
+	"imgloader.h"
+
+1563340524 c:\users\pc\documents\uas\grafis\uas_grafis\include\imgloader.h
 
