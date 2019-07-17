@@ -259,7 +259,7 @@ static float globRotP = 225.0f;
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTranslatef(0.0f,0.0f,-34); //deplasat pe axele x, y, z
     glRotatef(globRotG, 0,0,1);
-    glTranslatef(5.0f,0.0f,0.0f);
+    glTranslatef(6.0f,0.0f,0.0f);
     glRotatef(axisRot,0,1,0); //rotit pe axa Y
     gluSphere(venus, 0.6, 20, 20); //sfera
     glPopMatrix();
@@ -273,7 +273,7 @@ static float globRotP = 225.0f;
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTranslatef(0.0f,0.0f,-30); //deplasat pe axele x, y, z
     glRotatef(globRotB, 0,0,1);
-    glTranslatef(5.0f,0.0f,0.0f);
+    glTranslatef(7.0f,0.0f,0.0f);
     glRotatef(axisRot,0,1,0); //rotit pe axa Y
     gluSphere(pamant, 0.8, 20, 20); //sfera
     glPopMatrix();
@@ -287,7 +287,7 @@ static float globRotP = 225.0f;
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTranslatef(0.0f,0.0f,-25.5); //deplasat pe axele x, y, z
     glRotatef(globRotB, 0,0,1);
-    glTranslatef(5.0f,0.0f,0.0f);
+    glTranslatef(7.0f,0.0f,0.0f);
     glRotatef(axisRot,0,1,0); //rotit pe axa Y
     gluSphere(luna, 0.2, 20, 20); //sfera
     glPopMatrix();
@@ -301,9 +301,38 @@ static float globRotP = 225.0f;
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTranslatef(0.0f,0.0f,-23); //deplasat pe axele x, y, z
     glRotatef(globRotM, 0,0,1);
-    glTranslatef(5.0f,0.0f,0.0f);
+    glTranslatef(8.0f,0.0f,0.0f);
     glRotatef(axisRot,0,1,0); //rotit pe axa Y
     gluSphere(marte, 0.5, 20, 20); //sfera
+    glPopMatrix();
+
+/* Phobos */
+    //glColor3f(1.0f, 1.0f, 1.0f);
+    glPushMatrix();
+    glEnable ( GL_TEXTURE_2D );
+    glBindTexture ( GL_TEXTURE_2D, lunaTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTranslatef(0.0f,0.0f,-21); //deplasat pe axele x, y, z
+    glRotatef(globRotM, 0,0,1);
+    glTranslatef(7.9f,0.0f,0.0f);
+    glRotatef(axisRot,0,1,0); //rotit pe axa Y
+    gluSphere(luna, 0.1, 20, 20); //sfera
+    glPopMatrix();
+
+
+/* Deimos */
+    //glColor3f(1.0f, 1.0f, 1.0f);
+    glPushMatrix();
+    glEnable ( GL_TEXTURE_2D );
+    glBindTexture ( GL_TEXTURE_2D, lunaTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTranslatef(0.0f,0.0f,-21); //deplasat pe axele x, y, z
+    glRotatef(globRotM, 0,0,1);
+    glTranslatef(7.7f,0.0f,1.0f);
+    glRotatef(axisRot,0,1,0); //rotit pe axa Y
+    gluSphere(luna, 0.05, 20, 20); //sfera
     glPopMatrix();
 
 /* Planeta Jupiter */
@@ -315,7 +344,7 @@ static float globRotP = 225.0f;
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTranslatef(0.0f,0.0f,-20); //deplasat pe axele x, y, z
     glRotatef(globRotJ, 0,0,1);
-    glTranslatef(5.0f,0.0f,0.0f);
+    glTranslatef(9.0f,0.0f,0.0f);
     glRotatef(axisRot,0,1,0); //rotit pe axa Y
     gluSphere(jupiter, 1, 20, 20); //sfera
     glPopMatrix();
@@ -329,7 +358,7 @@ static float globRotP = 225.0f;
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTranslatef(0.0f,0.0f,-16); //deplasat pe axele x, y, z
     glRotatef(globRotS, 0,0,1);
-    glTranslatef(5.0f,0.0f,0.0f);
+    glTranslatef(10.0f,0.0f,0.0f);
     glRotatef(axisRot,0,1,0); //rotit pe axa Y
     gluSphere(saturn, 0.4, 20, 20); //sfera
     glPopMatrix();
@@ -343,7 +372,7 @@ static float globRotP = 225.0f;
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTranslatef(0.0f,0.0f,-14); //deplasat pe axele x, y, z
     glRotatef(globRotU, 0,0,1);
-    glTranslatef(5.0f,0.0f,0.0f);
+    glTranslatef(10.0f,0.0f,0.0f);
     glRotatef(axisRot,0,1,0); //rotit pe axa Y
     gluSphere(uranus, 0.4, 20, 20); //sfera
     glPopMatrix();
@@ -357,7 +386,7 @@ static float globRotP = 225.0f;
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTranslatef(0.0f,0.0f,-10); //deplasat pe axele x, y, z
     glRotatef(globRotN, 0,0,1);
-    glTranslatef(5.0f,0.0f,0.0f);
+    glTranslatef(11.0f,0.0f,0.0f);
     glRotatef(axisRot,0,1,0); //rotit pe axa Y
     gluSphere(neptun, 0.3, 20, 20); //sfera
     glPopMatrix();
@@ -371,7 +400,7 @@ static float globRotP = 225.0f;
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTranslatef(0.0f,0.0f,-6); //deplasat pe axele x, y, z
     glRotatef(globRotP, 0,0,1);
-    glTranslatef(5.0f,0.0f,0.0f);
+    glTranslatef(12.0f,0.0f,0.0f);
     glRotatef(axisRot,0,1,0); //rotit pe axa Y
     //glutSolidSphere(0.2,20,20); //sfera
     gluSphere(pluto, 0.2, 20, 20); //sfera
