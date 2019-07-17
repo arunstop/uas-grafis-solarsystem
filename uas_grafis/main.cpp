@@ -475,7 +475,7 @@ static void keyboard(unsigned char key,int x,int y)
         speed -=1.0f;
         break;
     case 's':
-        speed = 0.0f;
+        speed = 0.0f;//stop
         break;
     case '74': // J
         sudut_z += 15.0f;
