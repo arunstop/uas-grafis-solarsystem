@@ -6,6 +6,7 @@
 #include <iostream>
 #include "imgloader.h"
 
+GLuint starTexture;
 GLUquadric *sun;
 GLuint sunTexture;
 GLUquadric *mercur;
@@ -110,6 +111,7 @@ GLuint loadTexture(Image* image) {
 
 void initGL(int width, int height)
 {
+
     const GLfloat light_ambient[] = { 0.0f, 0.0f, 0.0f, 1.0f };
     const GLfloat light_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
     const GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -123,6 +125,10 @@ void initGL(int width, int height)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(-1.0, 1.0, -1.0, 1.0, -2.0, 2.0);
+
+    Image* starImage=loadBMP("poze/stars.bmp");
+    starTexture = loadTexture(starImage);
+
     // texture sun //////////////////////////////////
     sun = gluNewQuadric();
     gluQuadricTexture( sun, GL_TRUE);
@@ -194,8 +200,6 @@ void initGL(int width, int height)
     glMatrixMode(GL_MODELVIEW);
 
 }
-
-
 Vector sumbu_z, sumbu_x, sumbu_y;
 float Ex = 0 ,Ey = 0,Ez,Cex,Cey,Cez;
 
@@ -218,6 +222,28 @@ static float globRotS = 150.0f;
 static float globRotU = 175.0f;
 static float globRotN = 200.0f;
 static float globRotP = 225.0f;
+
+//Background Stars
+     glPushMatrix();
+      glTranslatef(0.0,0.0,2.0);
+      glScalef(0.5,0.5,0.5);
+      glEnable ( GL_TEXTURE_2D );
+        glBindTexture ( GL_TEXTURE_2D, starTexture);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      glBegin(GL_POLYGON);
+        glTexCoord2f(0.0, 0.0);
+        glVertex3f( -10000.0,-10000.0, 0.0);
+        glTexCoord2f(10000.0, 0.0);
+        glVertex3f(  10000.0,-10000.0, 0.0);
+        glTexCoord2f(10000.0, 10000.0);
+        glVertex3f(  10000.0, 10000.0, 0.0);
+        glTexCoord2f(0.0, 10000.0);
+        glVertex3f( -10000.0, 10000.0, 0.0);
+        glTexCoord2f(0.0, 0.0);
+        glVertex3f( -10000.0,-10000.0, 0.0);
+      glEnd();
+   glPopMatrix();
 
 /* Sun */
     //glColor3f(1.0f, 0.5f, 0.0f);
@@ -424,6 +450,7 @@ if (spin == true){
     }
 }
 
+ //draw textured rectangle
 
 
 
@@ -461,6 +488,18 @@ static void keyboard(unsigned char key,int x,int y)
         break;
     case 'w':
         Cz = Cz -1;
+        break;
+    case 'i':
+        Ly = Ly -1;
+        break;
+     case 'k':
+        Ly = Ly +1;
+        break;
+    case 'o':
+        Cy = Cy -1;
+        break;
+    case 'l':
+        Cy = Cy +1;
         break;
     case 'z':
         speed +=0.05f;
